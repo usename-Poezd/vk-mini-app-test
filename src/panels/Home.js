@@ -7,6 +7,7 @@ import Group from '@vkontakte/vkui/dist/components/Group/Group';
 import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
+import Link from '@vkontakte/vkui/dist/components/Link/Link';
 
 const Home = ({ id, go, friends }) => (
 	<Panel id={id}>
@@ -17,10 +18,11 @@ const Home = ({ id, go, friends }) => (
 				{
 					friends.items.map( (item, idx) => (
 						<Cell
+							key={item.id}
 							before={item.photo_200 ? <Avatar src={item.photo_200}/> : null}
 							description={item.city && item.city.title ? item.city.title : ''}
 						>
-							{`${item.first_name} ${item.last_name}`}
+							<Link href={`https://vk.com/id${item.id}`}>{`${item.first_name} ${item.last_name}`}</Link>
 						</Cell>
 					))
 				}
