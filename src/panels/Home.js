@@ -22,7 +22,7 @@ const Home = ({ id, go, friends }) => (
 							before={item.photo_200 ? <Avatar src={item.photo_200}/> : null}
 							description={item.city && item.city.title ? item.city.title : ''}
 						>
-							<Link href={`https://vk.com/id${item.id}`}>{`${item.first_name} ${item.last_name}`}</Link>
+							<Link target="_blank" href={`https://vk.com/id${item.id}`}>{`${item.first_name} ${item.last_name}`}</Link>
 						</Cell>
 					))
 				}
