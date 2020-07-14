@@ -9,7 +9,8 @@ import Persik from './panels/Persik';
 
 const App = () => {
 	const [activePanel, setActivePanel] = useState('home');
-	const [fetchedUser, setUser] = useState(null);
+	const [token, setToken] = useState();
+	const [friends, setFriends] = useState(null);
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
 
 	useEffect(() => {
@@ -20,12 +21,31 @@ const App = () => {
 				document.body.attributes.setNamedItem(schemeAttribute);
 			}
 		});
-		async function fetchData() {
-			const user = await bridge.send('VKWebAppGetUserInfo');
-			setUser(user);
+
+		const getAccessToken = async () => {
+			const token = await bridge.send("VKWebAppGetAuthToken", { "app_id": 7538950, "scope": "friends,status"});
+			setToken(token.access_token);
+			return token.access_token;
+		};
+
+		const fetchData = async (token) => {
+			const friends = await bridge.send('VKWebAppCallAPIMethod', {
+				method: "friends.get",
+				request_id: "32test",
+				params: {
+					user_ids: "1",
+					fields: "photo_200",
+					v:"5.120",
+					access_token: token
+				}
+			});
+			setFriends(friends.response);
 			setPopout(null);
-		}
-		fetchData();
+		};
+		getAccessToken()
+			.then((token) => {
+				fetchData(token);
+			});
 	}, []);
 
 	const go = e => {
@@ -34,7 +54,7 @@ const App = () => {
 
 	return (
 		<View activePanel={activePanel} popout={popout}>
-			<Home id='home' fetchedUser={fetchedUser} go={go} />
+			<Home id='home' friends={friends} go={go} />
 			<Persik id='persik' go={go} />
 		</View>
 	);

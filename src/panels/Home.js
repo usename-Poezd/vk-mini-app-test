@@ -8,40 +8,30 @@ import Cell from '@vkontakte/vkui/dist/components/Cell/Cell';
 import Div from '@vkontakte/vkui/dist/components/Div/Div';
 import Avatar from '@vkontakte/vkui/dist/components/Avatar/Avatar';
 
-const Home = ({ id, go, fetchedUser }) => (
+const Home = ({ id, go, friends }) => (
 	<Panel id={id}>
-		<PanelHeader>Example</PanelHeader>
-		{fetchedUser &&
-		<Group title="User Data Fetched with VK Bridge">
-			<Cell
-				before={fetchedUser.photo_200 ? <Avatar src={fetchedUser.photo_200}/> : null}
-				description={fetchedUser.city && fetchedUser.city.title ? fetchedUser.city.title : ''}
-			>
-				{`${fetchedUser.first_name} ${fetchedUser.last_name}`}
-			</Cell>
-		</Group>}
-
-		<Group title="Navigation Example">
-			<Div>
-				<Button size="xl" level="2" onClick={go} data-to="persik">
-					Show me the Persik, please
-				</Button>
-			</Div>
-		</Group>
+		<PanelHeader>Тестовая</PanelHeader>
+		{
+			friends && friends.items.length > 0 &&
+			<Group title="User Data Fetched with VK Bridge">
+				{
+					friends.items.map( (item, idx) => (
+						<Cell
+							before={item.photo_200 ? <Avatar src={item.photo_200}/> : null}
+							description={item.city && item.city.title ? item.city.title : ''}
+						>
+							{`${item.first_name} ${item.last_name}`}
+						</Cell>
+					))
+				}
+			</Group>
+		}
 	</Panel>
 );
 
 Home.propTypes = {
 	id: PropTypes.string.isRequired,
-	go: PropTypes.func.isRequired,
-	fetchedUser: PropTypes.shape({
-		photo_200: PropTypes.string,
-		first_name: PropTypes.string,
-		last_name: PropTypes.string,
-		city: PropTypes.shape({
-			title: PropTypes.string,
-		}),
-	}),
+	go: PropTypes.func.isRequired
 };
 
 export default Home;
